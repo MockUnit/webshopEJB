@@ -57,6 +57,8 @@
 		<include name="de/webshop/benutzerverwaltung/domain/Rolle.java"/>
 		<include name="de/webshop/benutzerverwaltung/rest/package-info.java"/>
 		<include name="de/webshop/benutzerverwaltung/rest/BenutzerList.java"/>
+		<include name="de/webshop/benutzerverwaltung/rest/ProduktbewertungList.java"/>
+		<include name="de/webshop/benutzerverwaltung/rest/RolleHasBenutzerList.java"/>
 		
 		<include name="de/webshop/bestellungsverwaltung/domain/package-info.java"/>
 		<include name="de/webshop/bestellungsverwaltung/rest/package-info.java"/>
