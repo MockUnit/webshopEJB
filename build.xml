@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<project name="Schema generieren mit JAXB" default="generate" basedir=".">
+
+	
+<!-- =================================================================== -->
+<!-- P R O P E R T I E S                                                 -->
+<!-- =================================================================== -->
+<property name="src.dir" value="${basedir}/ejbModule"/>
+<property name="schema.dir" value="${basedir}/schema"/>
+<property environment="env"/>
+
+
+<!-- =================================================================== -->
+<!-- U S E R   E R Z E U G E N                                           -->
+<!-- =================================================================== -->
+<target name="generate" description="XML Schema generieren">
+	<mkdir dir="${schema.dir}"/>
+	
+	<path id="schemagen.taskdef.classpath">
+		<pathelement location="${env.JBOSS_HOME}/client/jaxb-xjc.jar"/>
+		<pathelement location="${java.home}/../lib/tools.jar"/>  <!-- java.home = ...\Java\jdk\jre -->
+	</path>
+	
+	<taskdef name="schemagen"
+		     classname="com.sun.tools.jxc.SchemaGenTask"
+		     classpathref="schemagen.taskdef.classpath"/>
+	
+	<path id="schemagen.classpath">
+		<fileset dir="${env.JBOSS_HOME}/client">
+			<include name="*.jar"/>	
+		</fileset>
+		<fileset dir="${env.JBOSS_HOME}/common/lib">
+			<include name="*.jar"/>	
+		</fileset>
+		<fileset dir="${env.JBOSS_HOME}/server/default/deployers/resteasy.deployer">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<schemagen destdir="${schema.dir}"
+		       verbose="true"
+		       classpathref="schemagen.classpath">
+
+		<src path="${src.dir}"/>
+		
+		<!-- Es muessen nicht alle Klassen aufgezaehlt werden. -->
+		<!-- "schemagen" ermittelt automatisch die referenzierten Klassen. -->
+		<include name="de/webshop/artikelverwaltung/domain/package-info.java"/>
+		<include name="de/webshop/artikelverwaltung/domain/Artikel.java"/>
+		<include name="de/webshop/artikelverwaltung/domain/Kategorie.java"/>
+		<include name="de/webshop/artikelverwaltung/domain/KategorieHasArtikel.java"/>
+		<include name="de/webshop/artikelverwaltung/domain/Produktbewertung.java"/>
+
+		<include name="de/webshop/benutzerverwaltung/domain/package-info.java"/>
+		<include name="de/webshop/benutzerverwaltung/domain/AbstractBenutzer.java"/>
+		<include name="de/webshop/benutzerverwaltung/domain/Rolle.java"/>
+		<include name="de/webshop/benutzerverwaltung/rest/package-info.java"/>
+		<include name="de/webshop/benutzerverwaltung/rest/BenutzerList.java"/>
+		<include name="de/webshop/benutzerverwaltung/rest/ProduktbewertungList.java"/>
+		<include name="de/webshop/benutzerverwaltung/rest/RolleHasBenutzerList.java"/>
+		
+		<include name="de/webshop/bestellungsverwaltung/domain/package-info.java"/>
+		<include name="de/webshop/bestellungsverwaltung/rest/package-info.java"/>
+		<include name="de/webshop/bestellungsverwaltung/rest/BestellungList.java"/>	
+		
+		<include name="de/webshop/lagerverwaltung/rest/LagerList.java"/>
+		<include name="de/webshop/lagerverwaltung/rest/package-info.java"/>
+			
+		<include name="de/webshop/lagerverwaltung/domain/package-info.java"/>
+		
+		<schema namespace="http://webshop.de/benutzerverwaltung" file="benutzerverwaltung.xsd"/>
+		<schema namespace="http://webshop.de/bestellungsverwaltung" file="bestellungsverwaltung.xsd"/>
+		<schema namespace="http://webshop.de/artikelverwaltung" file="artikelverwaltung.xsd"/>
+		<schema namespace="http://webshop.de/lagerverwaltung" file="lagerverwaltung.xsd"/>
+	</schemagen>
+	
+	<loadfile property="xsd.string" srcFile="${schema.dir}/benutzerverwaltung.xsd"/>
+	<fail message="Die generierte XSD-Schemadatei 'benutzerverwaltung.xsd' enthaelt 'xs:anyType' und ist deshalb NICHT KORREKT">
+		<condition>
+			<contains string="${xsd.string}" substring="xs:anyType"/>
+		</condition>
+	</fail>
+	
+	<loadfile property="xsd.string" srcFile="${schema.dir}/bestellungsverwaltung.xsd"/>
+	<fail message="Die generierte XSD-Schemadatei 'bestellverwaltung.xsd' enthaelt 'xs:anyType' und ist deshalb NICHT KORREKT">
+		<condition>
+			<contains string="${xsd.string}" substring="xs:anyType"/>
+		</condition>
+	</fail>
+	
+	<loadfile property="xsd.string" srcFile="${schema.dir}/artikelverwaltung.xsd"/>
+	<fail message="Die generierte XSD-Schemadatei 'artikelverwaltung.xsd' enthaelt 'xs:anyType' und ist deshalb NICHT KORREKT">
+		<condition>
+			<contains string="${xsd.string}" substring="xs:anyType"/>
+		</condition>
+	</fail>
+	
+	<loadfile property="xsd.string" srcFile="${schema.dir}/lagerverwaltung.xsd"/>
+	<fail message="Die generierte XSD-Schemadatei 'artikelverwaltung.xsd' enthaelt 'xs:anyType' und ist deshalb NICHT KORREKT">
+		<condition>
+			<contains string="${xsd.string}" substring="xs:anyType"/>
+		</condition>
+	</fail>
+	
+	<echo message=' '/>
+	<echo message='Refresh [F5] fuer das EJB-Projekt durchfuehren:'/>
+	<echo message='xsd-Dateien sind im Unterverzeichnis "schema"'/>
+</target>
+
+</project>
