@@ -51,6 +51,8 @@
 		<include name="de/webshop/artikelverwaltung/domain/Kategorie.java"/>
 		<include name="de/webshop/artikelverwaltung/domain/KategorieHasArtikel.java"/>
 		<include name="de/webshop/artikelverwaltung/domain/Produktbewertung.java"/>
+		<include name="de/webshop/artikelverwaltung/rest/ArtikelList.java"/>
+		<include name="de/webshop/artikelverwaltung/rest/package-info.java"/>
 
 		<include name="de/webshop/benutzerverwaltung/domain/package-info.java"/>
 		<include name="de/webshop/benutzerverwaltung/domain/AbstractBenutzer.java"/>
